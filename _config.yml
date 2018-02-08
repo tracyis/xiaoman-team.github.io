@@ -7,7 +7,7 @@ title: Xiaoman iOS Blog
 subtitle:
 description:
 author: Xiaoman iOS Team
-language: en
+language: zh-Hans
 timezone:
 
 # URL
@@ -82,3 +82,7 @@ deploy:
   branch: master
 
 disqus_shortname: xiaomanios
+
+# Social links
+social:
+  GitHub: https://github.com/XiaomaniOS
