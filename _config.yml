@@ -3,16 +3,16 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Xiaoman iOS Blog
+title: Xiaoman Team Blog
 subtitle:
 description:
-author: Xiaoman iOS Team
+author: Xiaoman mobile Team
 language: zh-Hans
 timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://xiaomanios.github.io/
+url: https://xiaoman-team.github.io/
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -78,11 +78,10 @@ theme: next
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/XiaomaniOS/XiaomaniOS.github.io.git
+  repo: https://github.com/xiaoman-team/xiaoman-team.github.io.git
   branch: master
 
 disqus_shortname: xiaomanios
 
 # Social links
 social:
-  GitHub: https://github.com/XiaomaniOS
