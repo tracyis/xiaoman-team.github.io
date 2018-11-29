@@ -81,7 +81,5 @@ deploy:
   repo: git@github.com:xiaoman-team/xiaoman-team.github.io.git
   branch: master
 
-disqus_shortname: xiaoman
-
 # Social links
 social:

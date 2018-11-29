@@ -509,10 +509,10 @@ pangu: false
 
 # Disqus
 disqus:
-  enable: false
-  shortname:
+  enable: true
+  shortname: Xiaoman
   count: true
-  lazyload: false
+  lazyload: true
 
 # changyan
 changyan:
