@@ -17,14 +17,14 @@ tags:
 这个嘛，到官网下载就好了。https://nodejs.org/，作者目前使用的是11.3.0哈，安装好之后，就会有npm指令了。
 
 ## 安装hexo
-`npm install -g hexo-cli`
+```npm install -g hexo-cli```
 
 这样，博客支持程序就安装好了。
 
 # 配置网站本地环境
 
 ## 下载网站源码
-`git clone git@github.com:xiaoman-team/xiaoman-team.github.io.git`
+```git clone git@github.com:xiaoman-team/xiaoman-team.github.io.git```
 
 ## 获取网站源码分支
 为啥要获取，因为静态网站使用的是master分支，这个分支是试用hexo发布的，平时我们管理的文章，在source分支，为啥用这个分支？嗯，其实你也可以用其他分支不是？自己换就好了啦。
@@ -36,7 +36,7 @@ git checkout -b source origin/source
 
 ## 初始化hexo程序
 
-`npm install hexo --save`
+```npm install hexo --save```
 
 到目前为止，，你就搞定了本地环境配置拉
 
@@ -45,7 +45,7 @@ git checkout -b source origin/source
 
 ## 新文章编写
 比如这篇文章的指令是
-`hexo new start-use-hexo`
+```hexo new start-use-hexo```
 当然，start-use-hexo就是文章的链接名啦，文件会生成在 _post 目录下，是 markdown 格式的。
 
 ## 进入文章编写
@@ -54,10 +54,10 @@ git checkout -b source origin/source
 ## 预览文章
 
 使用一下命令生成静态文件来预览文章啦
-`hexo g`
+```hexo g```
 
 使用一下命令来打开预览服务器
-`hexo s`
+```hexo s```
 
 他会提示你本地打开路径，你自己打开就能预览你写好的文章啦。
 如果有时候没生效，试试
