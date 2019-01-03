@@ -1,7 +1,7 @@
 ---
 title: 如何使用 Carthage 集成私有 framework
 date: 2019-01-03 17:00:00
-tags: iOS, Carthage
+tags: [iOS,Carthage]
 ---
 
 	行文环境
