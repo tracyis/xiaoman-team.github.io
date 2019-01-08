@@ -71,6 +71,9 @@ Carthage 是 swift 开发的代码依赖工具，与Cocoapods直接引入第三�
 
 将源代码加入工程，确保需要暴露的类等是 public 的，因为默认是 internal，外部无法识别
 
+Objective-C代码需要设置header为Public
+![](https://static1.squarespace.com/static/53699711e4b052b073e44f1f/t/59f26cb727ef2db556c3648f/1509059778262/target-membership.png)
+
 私有 framework 如果有依赖库可以使用 Carthage 添加，主工程使用私有 framework 时也会 build 出依赖的 framework
 
 ### 编译
@@ -106,3 +109,4 @@ Carthage 是 swift 开发的代码依赖工具，与Cocoapods直接引入第三�
 * [Making a CocoaPod](https://guides.cocoapods.org/making/making-a-cocoapod.html)
 * [Improving Your Build Time in Xcode 10](https://patrickbalestra.com/blog/2018/08/27/improving-your-build-time-in-xcode-10.html)
 * [How the Zalando iOS App Abandoned CocoaPods and Reduced Build Time](https://jobs.zalando.com/tech/blog/how-the-zalando-ios-app-abandoned-cocoapods-and-reduced-build-time/?gh_src=4n3gxh1)
+* [Building Objective-C Frameworks](http://www.vsanthanam.com/writing/2017/10/26/building-objective-c-frameworks)
