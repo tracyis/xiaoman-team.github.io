@@ -1,0 +1,39 @@
+name: Deploy WebSite
+
+on:
+  push:
+    branches:
+      - 'source'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v1
+
+      - name: Set Git Info
+        env:
+          KEY_FOR_DEPLOY: ${{secrets.KEY_FOR_DEPLOY}}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$KEY_FOR_DEPLOY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+
+      - name: Prepare Build ENV
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+        
+      - run: |
+          npm i -g hexo-cli
+          npm i
+
+      - name: Deploy to Github
+        run: |
+          hexo generate && hexo deploy
+
