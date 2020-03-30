@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://xiaoman-team.github.io').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="行文环境 - Xcode 10.1 - Carthage 0.31.2 Carthage简介Carthage 是 swift 开发的代码依赖工具，与Cocoapods直接引入第三方源代码并修改 Xcode workspace 不同，Carthage 是将第三方库预先 build 好的 framework 引入工程。这样更适合大型项目，预先编译好的 framework 不需要重新编译。 快速使用 安">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何使用 Carthage 集成私有 framework">
+<meta property="og:url" content="https://xiaoman-team.github.io/2019/01/03/carthage_private_framework/index.html">
+<meta property="og:site_name" content="Xiaoman Team Blog">
+<meta property="og:description" content="行文环境 - Xcode 10.1 - Carthage 0.31.2 Carthage简介Carthage 是 swift 开发的代码依赖工具，与Cocoapods直接引入第三方源代码并修改 Xcode workspace 不同，Carthage 是将第三方库预先 build 好的 framework 引入工程。这样更适合大型项目，预先编译好的 framework 不需要重新编译。 快速使用 安">
+<meta property="og:image" content="https://static1.squarespace.com/static/53699711e4b052b073e44f1f/t/59f26cb727ef2db556c3648f/1509059778262/target-membership.png">
+<meta property="article:published_time" content="2019-01-03T09:01:47.000Z">
+<meta property="article:modified_time" content="2019-01-08T09:03:36.000Z">
+<meta property="article:author" content="Xiaoman mobile Team">
+<meta property="article:tag" content="iOS">
+<meta property="article:tag" content="Carthage">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://static1.squarespace.com/static/53699711e4b052b073e44f1f/t/59f26cb727ef2db556c3648f/1509059778262/target-membership.png">
+
+<link rel="canonical" href="https://xiaoman-team.github.io/2019/01/03/carthage_private_framework/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>如何使用 Carthage 集成私有 framework | Xiaoman Team Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Xiaoman Team Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://xiaoman-team.github.io/2019/01/03/carthage_private_framework/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Xiaoman mobile Team">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xiaoman Team Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何使用 Carthage 集成私有 framework
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-01-03 09:01:47" itemprop="dateCreated datePublished" datetime="2019-01-03T09:01:47+00:00">2019-01-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-01-08 09:03:36" itemprop="dateModified" datetime="2019-01-08T09:03:36+00:00">2019-01-08</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <pre><code>行文环境
+- Xcode 10.1
+- Carthage 0.31.2
+</code></pre><h2 id="Carthage"><a href="#Carthage" class="headerlink" title="Carthage"></a>Carthage</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>Carthage 是 swift 开发的代码依赖工具，与Cocoapods直接引入第三方源代码并修改 Xcode workspace 不同，Carthage 是将第三方库预先 build 好的 framework 引入工程。这样更适合大型项目，预先编译好的 framework 不需要重新编译。</p>
+<h3 id="快速使用"><a href="#快速使用" class="headerlink" title="快速使用"></a>快速使用</h3><ol>
+<li>安装 <code>brew install carthage</code></li>
+<li>在工程目录下创建 <code>Cartfile</code></li>
+<li>在 <code>Cartfile</code> 里添加依赖库，比如 <code>github &quot;Alamofire/Alamofire&quot; ~&gt; 4.7.2</code></li>
+<li>运行 <code>carthage update</code></li>
+<li>会生成 <code>Cartfile.resolved</code> 和 Carthage 文件夹 包括 Build 和 Checkout</li>
+<li><p>添加 framework 到工程，在 Build Phases 里新建 New Run Script Phase，输入：<br> <code>/usr/local/bin/carthage copy-frameworks</code></p>
+<p> 在 <code>Input Files</code> 项里填入 </p>
+<p> <code>$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework</code></p>
+<p> 在 <code>Output Files</code> 项里填入 </p>
+<p> <code>$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Alamofire.framework</code></p>
+</li>
+</ol>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><p><code>carthage update</code> 更新并重新编译 framework</p>
+<p><code>carthage bootstrap</code> 类似 update，一般用于新 checkout 的仓库第一次运行 carthage</p>
+<p><code>--platform iOS</code> build 平台参数</p>
+<p><code>--cache-builds</code> build 时使用缓存</p>
+<p><code>carthage build --no-skip-current</code> build private framework</p>
+<h3 id="Cartfile"><a href="#Cartfile" class="headerlink" title="Cartfile"></a>Cartfile</h3><p>引用github库 <code>github &quot;Alamofire/Alamofire&quot; ~&gt; 4.7.2</code></p>
+<p>指定具体tag <code>github &quot;malcommac/SwiftDate&quot; == 4.5.1</code> </p>
+<p>指定分支 <code>github &quot;XiaomaniOS/RichEditorView&quot; &quot;xiaoman&quot;</code></p>
+<p>私有仓库 <code>git &quot;ssh://git@git.xiaoman.co:7999/im/xmprotobuf.git&quot;</code></p>
+<p>本地仓库 <code>git &quot;file:///Users/neilpa/code/project&quot; &quot;branch&quot;</code></p>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>第一次 build 时间很长（喝杯咖啡先）</li>
+<li>CI 运行 <code>carthage update</code> 费时，使用 <code>--cache-builds</code> 加快效率</li>
+<li>没有 Cocoapods 的各种其他功能</li>
+</ul>
+<h2 id="创建私有-framework"><a href="#创建私有-framework" class="headerlink" title="创建私有 framework"></a>创建私有 framework</h2><h3 id="新建项目"><a href="#新建项目" class="headerlink" title="新建项目"></a>新建项目</h3><p>新建 <strong>Cocoa Touch Framework</strong> 的项目</p>
+<p>将 framework 的 scheme 设置成 shared，这里有个坑，新创建的项目 Xcode 不会生成 <code>.xcscheme</code> 文件，carthage 需要找这个文件来选择哪些 scheme 需要 build，所以需要修改一下 scheme 让 git 里生成<code>.xcscheme</code> 文件</p>
+<p>设置 <code>General</code> -&gt; <code>Deployment Target</code></p>
+<h3 id="添加代码"><a href="#添加代码" class="headerlink" title="添加代码"></a>添加代码</h3><p>将源代码加入工程，确保需要暴露的类等是 public 的，因为默认是 internal，外部无法识别</p>
+<p>Objective-C代码需要设置header为Public<br><img src="https://static1.squarespace.com/static/53699711e4b052b073e44f1f/t/59f26cb727ef2db556c3648f/1509059778262/target-membership.png" alt=""></p>
+<p>私有 framework 如果有依赖库可以使用 Carthage 添加，主工程使用私有 framework 时也会 build 出依赖的 framework</p>
+<h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><p><code>carthage build --no-skip-current</code></p>
+<p>如果有错参考 <a href="https://github.com/Carthage/Carthage#resolve-build-failures" target="_blank" rel="noopener">Resolve build failures</a></p>
+<p>如果提示找不到 scheme，检查上面提到的 <code>.xcscheme</code> 文件有没有提交到 git</p>
+<p>成功后打 git tag，Carthage 用 tag 来定位代码</p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>用上面提到的方法加入到主工程即可，注意依赖库也需要添加</p>
+<h2 id="Read-More"><a href="#Read-More" class="headerlink" title="Read More"></a>Read More</h2><h3 id="Carthage-1"><a href="#Carthage-1" class="headerlink" title="Carthage"></a>Carthage</h3><ul>
+<li><a href="https://github.com/Carthage/Carthage#resolve-build-failures" target="_blank" rel="noopener">Carthage/Carthage</a></li>
+<li><a href="http://shashikantjagtap.net/carthage-cocoapods-question/" target="_blank" rel="noopener">Carthage or CocoaPods: That is the question</a></li>
+<li><a href="https://samwize.com/2018/06/27/creating-a-private-framework-with-carthage/" target="_blank" rel="noopener">Creating a Private Framework With Carthage</a></li>
+<li><a href="https://github.com/Carthage/Carthage/issues/398" target="_blank" rel="noopener">Local Git Repos?</a></li>
+<li><a href="https://github.com/Carthage/Carthage/issues/844" target="_blank" rel="noopener">Nested Frameworks?</a></li>
+<li><a href="https://github.com/Carthage/Carthage/issues/848" target="_blank" rel="noopener">bootstrap vs update?</a></li>
+<li><a href="https://github.com/travis-ci/travis-ci/issues/4195" target="_blank" rel="noopener">Github API rate limit reached when building iOS project with Carthage</a></li>
+<li><a href="http://shashikantjagtap.net/five-steps-migrate-ios-project-cocoapods-carthage/" target="_blank" rel="noopener">Five Steps to Migrate iOS Project from CocoaPods to Carthage</a></li>
+</ul>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><ul>
+<li><a href="https://www.ca.com/en/blog-developers/dynamic-versus-static-framework-in-ios.html" target="_blank" rel="noopener">Dynamic Versus Static Framework in iOS</a></li>
+<li><a href="https://www.raywenderlich.com/5109-creating-a-framework-for-ios" target="_blank" rel="noopener">Creating a Framework for iOS</a></li>
+<li><a href="https://medium.com/flawless-app-stories/getting-started-with-reusable-frameworks-for-ios-development-f00d74827d11" target="_blank" rel="noopener">Getting Started with Reusable Frameworks for iOS Development</a></li>
+<li><a href="https://github.com/JohnSundell/SwiftPlate" target="_blank" rel="noopener">JohnSundell/SwiftPlate</a></li>
+<li><a href="https://guides.cocoapods.org/making/making-a-cocoapod.html" target="_blank" rel="noopener">Making a CocoaPod</a></li>
+<li><a href="https://patrickbalestra.com/blog/2018/08/27/improving-your-build-time-in-xcode-10.html" target="_blank" rel="noopener">Improving Your Build Time in Xcode 10</a></li>
+<li><a href="https://jobs.zalando.com/tech/blog/how-the-zalando-ios-app-abandoned-cocoapods-and-reduced-build-time/?gh_src=4n3gxh1" target="_blank" rel="noopener">How the Zalando iOS App Abandoned CocoaPods and Reduced Build Time</a></li>
+<li><a href="http://www.vsanthanam.com/writing/2017/10/26/building-objective-c-frameworks" target="_blank" rel="noopener">Building Objective-C Frameworks</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+              <a href="/tags/Carthage/" rel="tag"># Carthage</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/12/04/snappy-for-android/" rel="prev" title="snappy for android">
+      <i class="fa fa-chevron-left"></i> snappy for android
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/16/use-rxandroidlive-replace-livedata/" rel="next" title="使用RxAndroidLive来实现Livedata的功能">
+      使用RxAndroidLive来实现Livedata的功能 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Carthage"><span class="nav-number">1.</span> <span class="nav-text">Carthage</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#快速使用"><span class="nav-number">1.2.</span> <span class="nav-text">快速使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用命令"><span class="nav-number">1.3.</span> <span class="nav-text">常用命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cartfile"><span class="nav-number">1.4.</span> <span class="nav-text">Cartfile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点"><span class="nav-number">1.5.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建私有-framework"><span class="nav-number">2.</span> <span class="nav-text">创建私有 framework</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#新建项目"><span class="nav-number">2.1.</span> <span class="nav-text">新建项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加代码"><span class="nav-number">2.2.</span> <span class="nav-text">添加代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译"><span class="nav-number">2.3.</span> <span class="nav-text">编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用"><span class="nav-number">2.4.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Read-More"><span class="nav-number">3.</span> <span class="nav-text">Read More</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Carthage-1"><span class="nav-number">3.1.</span> <span class="nav-text">Carthage</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">3.2.</span> <span class="nav-text">其他</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Xiaoman mobile Team</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xiaoman mobile Team</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

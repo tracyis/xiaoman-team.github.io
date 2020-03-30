@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://xiaoman-team.github.io').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="前言团队博客的驱型基本做好了，接下来是要写一篇交大家使用的文章，这样才能让大家安心写些文档不是？目前使用的博客系统，是基于nodejs的hexo静态博客生成组件。好处是什么呢？是我们直接用github来托管就好了，不用自己管理空间哈。接下来我们说说怎么使用我们的博客系统 平台支持初始化公司用的比较多的是mac，下面就基于苹果环境来做教程啦，你们相应的做修改哈。先安装nodejs环境和博客平台环境。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初始化使用hexo">
+<meta property="og:url" content="https://xiaoman-team.github.io/2018/12/03/start-use-hexo/index.html">
+<meta property="og:site_name" content="Xiaoman Team Blog">
+<meta property="og:description" content="前言团队博客的驱型基本做好了，接下来是要写一篇交大家使用的文章，这样才能让大家安心写些文档不是？目前使用的博客系统，是基于nodejs的hexo静态博客生成组件。好处是什么呢？是我们直接用github来托管就好了，不用自己管理空间哈。接下来我们说说怎么使用我们的博客系统 平台支持初始化公司用的比较多的是mac，下面就基于苹果环境来做教程啦，你们相应的做修改哈。先安装nodejs环境和博客平台环境。">
+<meta property="article:published_time" content="2018-12-03T08:37:56.000Z">
+<meta property="article:modified_time" content="2018-12-04T07:44:13.000Z">
+<meta property="article:author" content="Xiaoman mobile Team">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://xiaoman-team.github.io/2018/12/03/start-use-hexo/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>初始化使用hexo | Xiaoman Team Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Xiaoman Team Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://xiaoman-team.github.io/2018/12/03/start-use-hexo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Xiaoman mobile Team">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xiaoman Team Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          初始化使用hexo
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-12-03 08:37:56" itemprop="dateCreated datePublished" datetime="2018-12-03T08:37:56+00:00">2018-12-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2018-12-04 07:44:13" itemprop="dateModified" datetime="2018-12-04T07:44:13+00:00">2018-12-04</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>团队博客的驱型基本做好了，接下来是要写一篇交大家使用的文章，这样才能让大家安心写些文档不是？<br>目前使用的博客系统，是基于nodejs的hexo静态博客生成组件。<br>好处是什么呢？是我们直接用github来托管就好了，不用自己管理空间哈。<br>接下来我们说说怎么使用我们的博客系统</p>
+<h1 id="平台支持初始化"><a href="#平台支持初始化" class="headerlink" title="平台支持初始化"></a>平台支持初始化</h1><p>公司用的比较多的是mac，下面就基于苹果环境来做教程啦，你们相应的做修改哈。<br>先安装nodejs环境和博客平台环境。</p>
+<h2 id="安装nodejs"><a href="#安装nodejs" class="headerlink" title="安装nodejs"></a>安装nodejs</h2><p>这个嘛，到官网下载就好了。<a href="https://nodejs.org/，作者目前使用的是11.3.0哈，安装好之后，就会有npm指令了。" target="_blank" rel="noopener">https://nodejs.org/，作者目前使用的是11.3.0哈，安装好之后，就会有npm指令了。</a></p>
+<h2 id="安装hexo"><a href="#安装hexo" class="headerlink" title="安装hexo"></a>安装hexo</h2><figure class="highlight plain"><figcaption><span>install -g hexo-cli```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">这样，博客支持程序就安装好了。</span><br><span class="line"></span><br><span class="line"># 配置网站本地环境</span><br><span class="line"></span><br><span class="line">## 下载网站源码</span><br><span class="line">&#96;&#96;&#96;git clone git@github.com:xiaoman-team&#x2F;xiaoman-team.github.io.git</span><br></pre></td></tr></table></figure>
+<h2 id="获取网站源码分支"><a href="#获取网站源码分支" class="headerlink" title="获取网站源码分支"></a>获取网站源码分支</h2><p>为啥要获取，因为静态网站使用的是master分支，这个分支是试用hexo发布的，平时我们管理的文章，在source分支，为啥用这个分支？嗯，其实你也可以用其他分支不是？自己换就好了啦。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd xiaoman-team.github.io</span><br><span class="line">git checkout -b source origin&#x2F;source</span><br></pre></td></tr></table></figure>
+<h2 id="初始化hexo程序"><a href="#初始化hexo程序" class="headerlink" title="初始化hexo程序"></a>初始化hexo程序</h2><figure class="highlight plain"><figcaption><span>install hexo --save```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">到目前为止，，你就搞定了本地环境配置拉</span><br><span class="line"></span><br><span class="line"># 文章编写</span><br><span class="line">接下来，是不是改写文章了呢？好吧，我们用hexo生成一片新文章好不好？</span><br><span class="line"></span><br><span class="line">## 新文章编写</span><br><span class="line">比如这篇文章的指令是</span><br><span class="line">&#96;&#96;&#96;hexo new start-use-hexo</span><br></pre></td></tr></table></figure>
+<p>当然，start-use-hexo就是文章的链接名啦，文件会生成在 _post 目录下，是 markdown 格式的。</p>
+<h2 id="进入文章编写"><a href="#进入文章编写" class="headerlink" title="进入文章编写"></a>进入文章编写</h2><p>怎么写？？去_post目录下去写你的文章啦，，markdown怎么用？这不在本文讨论范围内哦，你自己去试试？</p>
+<h2 id="预览文章"><a href="#预览文章" class="headerlink" title="预览文章"></a>预览文章</h2><p>使用一下命令生成静态文件来预览文章啦<br><figure class="highlight plain"><figcaption><span>g```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">使用一下命令来打开预览服务器</span><br><span class="line">&#96;&#96;&#96;hexo s</span><br></pre></td></tr></table></figure></p>
+<p>他会提示你本地打开路径，你自己打开就能预览你写好的文章啦。<br>如果有时候没生效，试试<br><code>hexo clean</code><br>在<br><code>hexo g</code></p>
+<h2 id="发布文章"><a href="#发布文章" class="headerlink" title="发布文章"></a>发布文章</h2><p>也是很简单<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure><br>请你在预览好之后，在执行 d 的命令哈。<br>该命令执行完成之后，会推送到master分支上，然后我们的网站<br> <a href="https://xiaoman-team.github.io.git" target="_blank" rel="noopener">https://xiaoman-team.github.io.git</a> 就会更新了。</p>
+<h1 id="保存文章源码"><a href="#保存文章源码" class="headerlink" title="保存文章源码"></a>保存文章源码</h1><p>最后，最重要的，当然是把你的文章源码保存下来了啦。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add source&#x2F;_posts&#x2F;start-use-hexo.md</span><br><span class="line">git commit -m &#39;add start use hexo post&#39;</span><br><span class="line">git push</span><br></pre></td></tr></table></figure></p>
+<h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>好了，目前源码也已经保存了，文章也发布了，教程就是这么简单啦。有啥不懂的，可以提出来我们在探讨一下啦。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/11/08/ios10_notification/" rel="prev" title="阿里云SDK实现iOS10推送通知">
+      <i class="fa fa-chevron-left"></i> 阿里云SDK实现iOS10推送通知
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/12/04/snappy-for-android/" rel="next" title="snappy for android">
+      snappy for android <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#平台支持初始化"><span class="nav-number">2.</span> <span class="nav-text">平台支持初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装nodejs"><span class="nav-number">2.1.</span> <span class="nav-text">安装nodejs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装hexo"><span class="nav-number">2.2.</span> <span class="nav-text">安装hexo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取网站源码分支"><span class="nav-number">2.3.</span> <span class="nav-text">获取网站源码分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化hexo程序"><span class="nav-number">2.4.</span> <span class="nav-text">初始化hexo程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进入文章编写"><span class="nav-number">2.5.</span> <span class="nav-text">进入文章编写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#预览文章"><span class="nav-number">2.6.</span> <span class="nav-text">预览文章</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布文章"><span class="nav-number">2.7.</span> <span class="nav-text">发布文章</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#保存文章源码"><span class="nav-number">3.</span> <span class="nav-text">保存文章源码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结语"><span class="nav-number">4.</span> <span class="nav-text">结语</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Xiaoman mobile Team</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xiaoman mobile Team</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

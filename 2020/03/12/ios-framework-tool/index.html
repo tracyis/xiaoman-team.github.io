@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://xiaoman-team.github.io').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="作者: Bobo - Cocoapods 1.9.0 - Carthage 0.34.0 - Xcode 11.3.1 选择Carthage的理由 去中心化，预编译特性 更新兼容了Swift 5编译 尝试同步开发的另一种选择  如何使用Carthage开发组件 安装指引 https:&#x2F;&#x2F;github.com&#x2F;Carthage&#x2F;Carthage#installing-carthage framewo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="组件开发工具总结">
+<meta property="og:url" content="https://xiaoman-team.github.io/2020/03/12/ios-framework-tool/index.html">
+<meta property="og:site_name" content="Xiaoman Team Blog">
+<meta property="og:description" content="作者: Bobo - Cocoapods 1.9.0 - Carthage 0.34.0 - Xcode 11.3.1 选择Carthage的理由 去中心化，预编译特性 更新兼容了Swift 5编译 尝试同步开发的另一种选择  如何使用Carthage开发组件 安装指引 https:&#x2F;&#x2F;github.com&#x2F;Carthage&#x2F;Carthage#installing-carthage framewo">
+<meta property="article:published_time" content="2020-03-12T02:59:13.000Z">
+<meta property="article:modified_time" content="2020-03-12T02:59:13.000Z">
+<meta property="article:author" content="Xiaoman mobile Team">
+<meta property="article:tag" content="iOS">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://xiaoman-team.github.io/2020/03/12/ios-framework-tool/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>组件开发工具总结 | Xiaoman Team Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Xiaoman Team Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://xiaoman-team.github.io/2020/03/12/ios-framework-tool/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Xiaoman mobile Team">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xiaoman Team Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          组件开发工具总结
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-12 02:59:13" itemprop="dateCreated datePublished" datetime="2020-03-12T02:59:13+00:00">2020-03-12</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <pre><code>作者: Bobo
+- Cocoapods 1.9.0
+- Carthage 0.34.0
+- Xcode 11.3.1
+</code></pre><h2 id="选择Carthage的理由"><a href="#选择Carthage的理由" class="headerlink" title="选择Carthage的理由"></a>选择Carthage的理由</h2><ol>
+<li>去中心化，预编译特性</li>
+<li>更新兼容了Swift 5编译</li>
+<li>尝试同步开发的另一种选择</li>
+</ol>
+<h2 id="如何使用Carthage开发组件"><a href="#如何使用Carthage开发组件" class="headerlink" title="如何使用Carthage开发组件"></a>如何使用Carthage开发组件</h2><ol>
+<li>安装指引 <a href="https://github.com/Carthage/Carthage#installing-carthage" target="_blank" rel="noopener">https://github.com/Carthage/Carthage#installing-carthage</a></li>
+<li>framework 链接问题，因为有的target的General里没有Link选项，所以统一使用BuildPhase的Link Binary with Libraries</li>
+<li>私有库包含其他库的是否需要copy-frameworks script，不需要，因为最终链接的地方是主项目，私有库copy会导致嵌套引入</li>
+<li>同步开发，Carthage的file模式并不能很好的支持本地同步开发；<a href="https://www.mokacoding.com/blog/carthage-no-build/" target="_blank" rel="noopener">https://www.mokacoding.com/blog/carthage-no-build/</a> 此文章提出的“弱使用”加上submodule的引入方式根本上是使用Xcode workspace集成开发，而这种方式有不少缺点，比如名字空间冲突，build setting重复设置等等</li>
+</ol>
+<h2 id="Carthage的问题"><a href="#Carthage的问题" class="headerlink" title="Carthage的问题"></a>Carthage的问题</h2><ol>
+<li>慢，可用Terminal proxy解决</li>
+<li>版本冲突，库没有版本依赖的声明，最终在主项目使用一个版本的库，会出现代码不兼容的情况；和pod引入的同一库也存在不同版本并存的问题</li>
+<li>动态link，有的库有动态依赖的问题，编译时不能发现错误，但实际缺少库运行app会报“dyld __abort_with_payload”问题</li>
+</ol>
+<h2 id="Cocoapods常用命令"><a href="#Cocoapods常用命令" class="headerlink" title="Cocoapods常用命令"></a>Cocoapods常用命令</h2><ol>
+<li>创建组件，<code>pod lib create</code></li>
+<li>验证，<code>pod spec lint --sources=&#39;xxx&#39; --allow-warnings</code></li>
+<li>上传，<code>pod repo push OKSpecs SPECS_NAME.podspec --sources=&#39;xxx&#39; --allow-warnings</code></li>
+</ol>
+<h2 id="SwiftPM"><a href="#SwiftPM" class="headerlink" title="SwiftPM"></a>SwiftPM</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ol>
+<li>原生Xcode支持，没有类似Podfile，Package.resolved文件则对应lockfile</li>
+<li>Package.swift没有version字段，所以私有库更新并不需要管理version/tag，也没有spec仓库管理</li>
+<li>测试方便</li>
+</ol>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ol>
+<li>不支持oc(貌似已经支持)，不支持resource</li>
+<li>慢，xcode fetch/install比pod install慢很多，包括更新，也无法单独更新，无法手动控制安装</li>
+<li>源文件相比Pods/文件夹，存在derived data，一旦删掉，需要重新fetch</li>
+</ol>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>不适合复杂混编项目，适合小型项目，适合编写纯逻辑的swift库<br> PS: <a href="https://forums.swift.org/t/how-to-add-local-swift-package-as-dependency/26457/7" target="_blank" rel="noopener">https://forums.swift.org/t/how-to-add-local-swift-package-as-dependency/26457/7</a></p>
+<h2 id="组件的版本-tag-管理"><a href="#组件的版本-tag-管理" class="headerlink" title="组件的版本(tag)管理"></a>组件的版本(tag)管理</h2><ol>
+<li>主项目使用branch模式，拉取最新代码，也可以用于feature分支开发</li>
+<li>什么时候需要更新tag，组件有互相依赖时，比如OKWorkbench依赖OKCore，这时候OKCore需要更新的话就需要升级tag</li>
+<li>组件的开发都应该优先在主项目切换为path模式做本地开发</li>
+<li>什么时候应该上传tag的更新，一个功能相关的组件全部开发完毕时，这样能保证不会过于频繁的升级组件版本</li>
+</ol>
+<h2 id="组件设计"><a href="#组件设计" class="headerlink" title="组件设计"></a>组件设计</h2><ol>
+<li>现阶段组件都是为主项目服务</li>
+<li>组件应尽量具有单一性，可单独测试性，应尽量避免为了使用组件的一个小部分引入整个组件的情况出现</li>
+<li>应避免组件互相之间嵌套依赖，比如OKNetwork依赖OKCore，OKWorkbench依赖OKNetwork和OKCore，此时只需要保持OKWorkbench对OKNetwork依赖即可，避免多版本冲突，第三方库同理</li>
+<li>组件内的命名应保留名字空间，单独可阅读，避免使用过长的名字空间取名，比如OKCore.A.B.C…</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/12/ios-localization/" rel="prev" title="iOS多语言开发探讨">
+      <i class="fa fa-chevron-left"></i> iOS多语言开发探讨
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/30/swift5-2/" rel="next" title="Swift 5.2 新特性">
+      Swift 5.2 新特性 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#选择Carthage的理由"><span class="nav-number">1.</span> <span class="nav-text">选择Carthage的理由</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何使用Carthage开发组件"><span class="nav-number">2.</span> <span class="nav-text">如何使用Carthage开发组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Carthage的问题"><span class="nav-number">3.</span> <span class="nav-text">Carthage的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cocoapods常用命令"><span class="nav-number">4.</span> <span class="nav-text">Cocoapods常用命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SwiftPM"><span class="nav-number">5.</span> <span class="nav-text">SwiftPM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#优点"><span class="nav-number">5.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点"><span class="nav-number">5.2.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结论"><span class="nav-number">5.3.</span> <span class="nav-text">结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组件的版本-tag-管理"><span class="nav-number">6.</span> <span class="nav-text">组件的版本(tag)管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组件设计"><span class="nav-number">7.</span> <span class="nav-text">组件设计</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Xiaoman mobile Team</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xiaoman mobile Team</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
